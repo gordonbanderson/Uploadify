@@ -113,7 +113,113 @@ $(function() {
 			//$uploader.uploadify(opts);
 			console.log("About to involder html5 uploader");
 			//z = new displayMessage('wombles');
-			var uploddr = new uploader('drop', 'status', '/html5upload', 'list');
+			//var uploddr = new uploader('drop', 'status', '/html5upload', 'list');
+
+
+
+	var fileTemplate = "<div id=\"{{id}}\">";
+    fileTemplate += "<div class=\"progressbar\"></div>";
+    fileTemplate += "<div class=\"preview\"></div>";
+    fileTemplate += "<div class=\"filename\">{{filename}}</div>";
+    fileTemplate += "</div>";
+
+    function slugify(text)
+    {
+        text = text.replace(/[^-a-zA-Z0-9,&\s]+/ig, '');
+        text = text.replace(/-/gi, "_");
+        text = text.replace(/\s/gi, "-");
+        return text;
+    }
+
+	$("#dropbox, #multiple").html5Uploader({
+		name: "upload",
+		postUrl: "/html5upload",
+
+		onClientLoadStart:function(e,file){console.log("On client start")},
+		onClientError:function(e,file){console.log("On client error")},
+		onClientLoadEnd:function(e,file){console.log("On client load end")},
+		onClientProgress:function(e,file){console.log("On client load progress")},
+		onServerAbort:function(e,file){console.log("On server abort")},
+		onServerError:function(e,file){console.log("On server error")},
+		onServerLoad:function(e,file){console.log("On server load")},
+		onServerProgress:function(e,file){console.log("On server progress")},
+		onServerReadyStateChange:function(e,file){console.log("On server ready state change")},
+
+		 onClientLoadStart: function (e, file)
+        {
+            var upload = $("#dropboxStatus");
+            if (upload.is(":hidden"))
+            {
+                upload.show();
+            }
+            upload.append(fileTemplate.replace(/{{id}}/g, slugify(file.name)).replace(/{{filename}}/g, file.name));
+        },
+        onClientLoad: function (e, file)
+        {
+            $("#" + slugify(file.name)).find(".preview").append("<img width=\"50\" height=\"50\" src=\"" + e.target.result + "\" alt=\"\">");
+        },
+        onServerLoadStart: function (e, file)
+        {
+            $("#" + slugify(file.name)).find(".progressbar").html('0%');
+        },
+
+        onServerLoad: function (e, file)
+        {
+            $("#" + slugify(file.name)).find(".progressbar").html('100%');
+        },
+
+        onServerProgress: function (e, file)
+        {
+            if (e.lengthComputable)
+            {
+                var percentComplete = (e.loaded / e.total) * 100;
+                $("#" + slugify(file.name)).find(".progressbar").html(percentComplete+'%');
+            }
+        },
+
+
+	});
+
+
+
+/*
+$(function ()
+{
+    var fileTemplate = "<div id=\"{{id}}\">";
+    fileTemplate += "<div class=\"progressbar\"></div>";
+    fileTemplate += "<div class=\"preview\"></div>";
+    fileTemplate += "<div class=\"filename\">{{filename}}</div>";
+    fileTemplate += "</div>";
+
+    function slugify(text)
+    {
+        text = text.replace(/[^-a-zA-Z0-9,&\s]+/ig, '');
+        text = text.replace(/-/gi, "_");
+        text = text.replace(/\s/gi, "-");
+        return text;
+    }
+    $("#dropbox").html5Uploader(
+    {
+       
+        
+        
+       
+    });
+    $(".download").mousedown(function ()
+    {
+        $(this).css(
+        {
+            "background-image": "url('images/download-clicked.png')"
+        });
+    }).mouseup(function ()
+    {
+        $(this).css(
+        {
+            "background-image": "url('images/download.png')"
+        });
+    });
+});
+*/
 
 			console.log("invoked html5 uploader");
 
