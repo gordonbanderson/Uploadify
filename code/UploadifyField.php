@@ -427,11 +427,11 @@ abstract class UploadifyField extends FormField
 	 */
 	public function FieldHolder() {
 		Requirements::javascript(THIRDPARTY_DIR."/jquery/jquery.js");
-		Requirements::javascript("uploadify/javascript/swfobject.js");
-		Requirements::javascript("uploadify/javascript/uploadify.js");
+		//Requirements::javascript("uploadify/javascript/swfobject.js");
+		Requirements::javascript("uploadify/javascript/html5uploader.js");
 		Requirements::javascript(THIRDPARTY_DIR."/jquery-metadata/jquery.metadata.js");
 		Requirements::javascript(THIRDPARTY_DIR."/jquery-livequery/jquery.livequery.js");
-		Requirements::javascript("uploadify/javascript/uploadify_init.js");
+		Requirements::javascript("uploadify/javascript/html5uploader_init.js");
 		Requirements::themedCSS("uploadify");
 
 		$this->Message = $this->XML_val('Message');
