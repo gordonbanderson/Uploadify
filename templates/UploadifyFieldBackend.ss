@@ -3,13 +3,11 @@
 	  <div class="tabNavigation clearfix">
 		<label for="$id">$Title</label>
 
-		************
-	<div id="box"> 
-		<div id="status">Drag the files from a folder to a selected area ...</div> 
-		<div id="drop" style="width:100%; height: 100px; border: solid red 1px;"></div> 
-	</div> 
-	<div id="list"></div> 
 
+<div id="dropbox">DROP BOX</div>
+<input id="multiple" type="file" multiple>
+
+<div id="dropboxStatus">Drop box status here</div>
 
 	    <ul class="navigation">
 	        <li class="first"><a href="#import-$id" id="tab-import-$id"><% _t('Uploadify.CHOOSEEXISTING','Choose existing') %></a></li>        
