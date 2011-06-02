@@ -3,6 +3,7 @@
 class UploadifyUploader extends Controller {
 
 	public function index(SS_HTTPRequest $r) {
+		error_log("UPLOAIFY UPLOADER");
 		if(isset($_FILES["Filedata"]) && is_uploaded_file($_FILES["Filedata"]["tmp_name"])) {
 			$upload_folder = urldecode($r->requestVar('uploadFolder'));
 			if(isset($_REQUEST['FolderID'])) {
