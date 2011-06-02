@@ -15,6 +15,8 @@
 */
 
 function uploader(place, status, targetPHP, show) {
+	console.log("PLACE");
+	console.log(place);
 	
 	// Upload image files
 	upload = function(file) {
@@ -157,6 +159,9 @@ function uploader(place, status, targetPHP, show) {
 	}
 	
 	// The inclusion of the event listeners (DragOver and drop)
+
+	console.log("FINDING EL BY ID");
+	console.log(place);
 
 	this.uploadPlace =  document.getElementById(place);
 	this.uploadPlace.addEventListener("dragover", function(event) {
