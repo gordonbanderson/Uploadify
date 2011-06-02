@@ -1,4 +1,7 @@
 jQuery.noConflict();
+
+console.log('html5 init');
+
 (function($) {
 $(function() {
 	$('.UploadifyField').livequery(function() {
@@ -105,7 +108,18 @@ $(function() {
 
 				});
 			}
-			$uploader.uploadify(opts);
+
+			// invoke the HTML5 uploader
+			//$uploader.uploadify(opts);
+			console.log("About to involder html5 uploader");
+			//z = new displayMessage('wombles');
+			var uploddr = new uploader('drop', 'status', '/html5upload', 'list');
+
+			console.log("invoked html5 uploader");
+
+
+
+
 
 			// Build the "fake" CSS button
 			var $buttonWrapper = $('.button_wrapper', $t);
