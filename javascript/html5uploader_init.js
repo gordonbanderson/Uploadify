@@ -23,6 +23,9 @@ $(function() {
 			 														**/			
 
 			opts = $uploader.metadata();
+			console.log("METADATA");
+			console.log(opts);
+
 			$.extend(opts, {
 				onComplete: function(event, queueID, fileObj, response, data) {
 					$e = $(event.currentTarget);
@@ -135,7 +138,7 @@ $(function() {
 	$("#dropbox, #multiple").html5Uploader({
 		name: "upload",
 		postUrl: "/html5upload",
-		
+
 		onClientLoadStart:function(e,file){console.log("On client start")},
 		onClientError:function(e,file){console.log("On client error")},
 		onClientLoadEnd:function(e,file){console.log("On client load end")},
@@ -154,15 +157,6 @@ $(function() {
 			console.log($uploader.metadata());
 
 
-			$.ajax({
-				url: e.metadata().refreshlink,
-				data: {'FileIDs' : ids.join(",")},
-				async: false,
-				dataType: "json",
-				success: function(data) {
-					$preview.html(data.html);
-				}
-			});
 
 		},
 
@@ -188,6 +182,41 @@ $(function() {
         {
             $("#" + slugify(file.name)).find(".progressbar").html('100%');
             alert('completed');
+
+console.log("OPTS");
+			console.log(opts);
+console.log("Refresh link:"+opts.refreshlink);
+				console.log('***********');
+
+
+			$preview = $('#upload_preview_'+$e.attr('id'));
+			$inputs = $('.inputs input', $preview);			
+			if($preview.length) {
+				ids = new Array();
+				$inputs.each(function() {
+				if($(this).val().length) {
+					ids.push($(this).val());
+				}
+			});
+			
+			ids.push(response);
+
+			consolelog("IDS:"+ids);
+
+			
+									
+			$.ajax({
+				url: $e.metadata().refreshlink,
+				data: {'FileIDs' : ids.join(",")},
+				async: false,
+				dataType: "json",
+				success: function(data) {
+					$preview.html(data.html);
+				}
+				});
+			}
+
+
             $("#" + slugify(file.name)).html('');
         },
 
