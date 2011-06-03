@@ -134,7 +134,8 @@ $(function() {
 
 	$("#dropbox, #multiple").html5Uploader({
 		name: "upload",
-		postUrl: "/html5upload",
+		postUrl: "/html5upload?FolderID="+
+		$('#UploadFolderID_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles').val(),
 
 		onClientLoadStart:function(e,file){console.log("On client start")},
 		onClientError:function(e,file){console.log("On client error")},
