@@ -4,10 +4,6 @@
 		<label for="$id">$Title</label>
 
 
-<div id="dropbox">DROP BOX</div>
-<input id="multiple" type="file" multiple>
-
-<div id="dropboxStatus">Drop box status here</div>
 
 	    <ul class="navigation">
 	        <li class="first"><a href="#import-$id" id="tab-import-$id"><% _t('Uploadify.CHOOSEEXISTING','Choose existing') %></a></li>        
@@ -17,6 +13,14 @@
 	  <div class="horizontal_tabs">
 	      <div id="upload-$id" class="horizontal_tab upload">
 			<div class="middleColumn">
+
+
+<div id="dropbox">DROP BOX</div>
+<input id="multiple" type="file" multiple>
+
+<div id="dropboxStatus">Drop box status here</div>
+
+
 				<div class="button_wrapper">
 					<a class="uploadify_button upload">$ButtonText</a>
 					<div class="object_wrapper">
