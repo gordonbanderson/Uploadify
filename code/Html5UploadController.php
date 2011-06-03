@@ -28,7 +28,7 @@ error_log('T2');
 		error_log("post get folder");
 
 		//FIXME - hardwired for testing
-		if($folder) {
+		if(isset($folder)) {
 			error_log("Found folder");
 			$upload_folder = UploadifyField::relative_asset_dir($folder->Filename);
 		} else {
