@@ -21,6 +21,7 @@ $(function() {
 			/**
 			 Build a set of options to pass to the uploadify object
 			 														**/			
+
 			opts = $uploader.metadata();
 			$.extend(opts, {
 				onComplete: function(event, queueID, fileObj, response, data) {
@@ -143,7 +144,25 @@ $(function() {
 		onServerError:function(e,file){console.log("On server error")},
 		onServerLoad:function(e,file){console.log("On server load")},
 		onServerProgress:function(e,file){console.log("On server progress")},
-		onServerReadyStateChange:function(e,file){console.log("On server ready state change")},
+		onServerReadyStateChange:function(e,file){
+			console.log("On server ready state change");
+			console.log(e);
+			console.log(file);
+			console.log("Metadata");
+			console.log($uploader.metadata());
+
+
+			$.ajax({
+				url: e.metadata().refreshlink,
+				data: {'FileIDs' : ids.join(",")},
+				async: false,
+				dataType: "json",
+				success: function(data) {
+					$preview.html(data.html);
+				}
+			});
+
+		},
 
 		 onClientLoadStart: function (e, file)
         {
@@ -166,6 +185,8 @@ $(function() {
         onServerLoad: function (e, file)
         {
             $("#" + slugify(file.name)).find(".progressbar").html('100%');
+            alert('completed');
+            $("#" + slugify(file.name)).html('');
         },
 
         onServerProgress: function (e, file)
