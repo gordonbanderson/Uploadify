@@ -134,9 +134,8 @@ $(function() {
 
 	$("#dropbox, #multiple").html5Uploader({
 		name: "upload",
-		postUrl: "/html5upload?FolderID="+
-		$('#UploadFolderID_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles').val(),
-
+		postUrl: "/html5upload",
+		
 		onClientLoadStart:function(e,file){console.log("On client start")},
 		onClientError:function(e,file){console.log("On client error")},
 		onClientLoadEnd:function(e,file){console.log("On client load end")},
@@ -146,6 +145,8 @@ $(function() {
 		onServerLoad:function(e,file){console.log("On server load")},
 		onServerProgress:function(e,file){console.log("On server progress")},
 		onServerReadyStateChange:function(e,file){
+			console.log($(this));
+
 			console.log("On server ready state change");
 			console.log(e);
 			console.log(file);
@@ -239,7 +240,7 @@ $(function ()
         {
             "background-image": "url('images/download.png')"
         });
-    });
+    }); 
 });
 */
 
@@ -304,6 +305,7 @@ $(function ()
 	
 	// Change folder ajax post
 	$('.folder_select').find(':submit').live("click", function() {
+		console.log("Changing folder");
 		$t = $(this);
 		$target = $(this).parents('.UploadifyField').find('.uploadify');
 		$folderSelect = $('#folder_select_'+$target.attr('id'));
@@ -313,6 +315,11 @@ $(function ()
 			$t.metadata().url, 
 			{ FolderID : folder_id, NewFolder : new_folder}
 		);
+
+		// change the post URL of the html5 uploader to ensure the correct folder is used
+		//html5uploader.postUrl = '/html5upload?FolderID='+
+		//$('#UploadFolderID_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles').val();
+
 		return false;
 	});
 	$('.folder_select :submit').livequery(function() {
