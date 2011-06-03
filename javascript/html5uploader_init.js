@@ -148,13 +148,53 @@ $(function() {
 		onServerLoad:function(e,file){console.log("On server load")},
 		onServerProgress:function(e,file){console.log("On server progress")},
 		onServerReadyStateChange:function(e,file){
-			console.log($(this));
+			//.log($(this));
 
-			console.log("On server ready state change");
-			console.log(e);
-			console.log(file);
-			console.log("Metadata");
-			console.log($uploader.metadata());
+			//console.log("On server ready state change: EVENT");
+			//console.log(e);
+			//console.log(e.srcElement);
+			//console.log(file);
+
+			r = e.srcElement.response;
+
+			if (r) {
+				console.log("RESPONSE:"+r);
+				file_id = eval('('+r+')');
+				console.log(file_id.file_id);
+
+				// this file id is inserted into the .inputs panel with hidden IDs,
+				// it will then be updated on the completion of the upload sequence
+
+				var domel = $('#UploadFolderID_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles');
+				
+				var inputs = $('.inputs', domel);
+				console.log(domel);
+				inputs.append('<p>++++Test</p>');
+
+
+				/*
+				<div class="inputs">
+	
+		
+			<input type="hidden" name="UploadedFiles[]" value="262">
+		
+			<input type="hidden" name="UploadedFiles[]" value="263">
+		
+			<input type="hidden" name="UploadedFiles[]" value="264">
+		
+	
+</div>
+*/
+
+
+			}
+		
+			/*
+			if(http.readyState == 4) {
+    			alert(http.responseText);
+  			}
+  			*/
+
 
 
 
@@ -180,6 +220,10 @@ $(function() {
 
         onServerLoad: function (e, file)
         {
+        	console.log("On server load");
+        	console.log(e);
+        	console.log(file);
+
             $("#" + slugify(file.name)).find(".progressbar").html('100%');
             alert('completed');
 
@@ -188,9 +232,13 @@ console.log("OPTS");
 console.log("Refresh link:"+opts.refreshlink);
 				console.log('***********');
 
-
-			$preview = $('#upload_preview_'+$e.attr('id'));
-			$inputs = $('.inputs input', $preview);			
+			//FIXME - understand the id thing here instead of upload_preview_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles
+		
+//			$preview = $('#upload_preview_'+$e.attr('id'));
+			$preview = $('#upload_preview_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles');
+			$inputs = $('.inputs input', $preview);
+			console.log("INPUTS");
+			console.log($inputs);	
 			if($preview.length) {
 				ids = new Array();
 				$inputs.each(function() {
@@ -199,14 +247,16 @@ console.log("Refresh link:"+opts.refreshlink);
 				}
 			});
 			
-			ids.push(response);
+			//ids.push(262);
+			//ids.push(263);
+			//ids.push(264);
 
-			consolelog("IDS:"+ids);
+			console.log("IDS:"+ids);
 
 			
 									
 			$.ajax({
-				url: $e.metadata().refreshlink,
+				url: opts.refreshlink,
 				data: {'FileIDs' : ids.join(",")},
 				async: false,
 				dataType: "json",
