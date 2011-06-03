@@ -15,7 +15,7 @@ class Html5UploadController extends Controller {
 error_log('T1');
 
 		if(isset($_REQUEST['FolderID'])) {
-			error_log("**** FOLDER ID SET ON UPLOAD");
+			error_log("**** FOLDER ID SET ON UPLOAD".Convert::raw2sql($_REQUEST['FolderID']));
 			if($folder = DataObject::get_by_id("Folder", Convert::raw2sql($_REQUEST['FolderID']))) {
 				$upload_folder = UploadifyField::relative_asset_dir($folder->Filename);
 			}
@@ -24,14 +24,16 @@ error_log('T1');
 
 error_log('T2');
 
-		$folder = $folder = DataObject::get_by_id('Folder', 208);
+//folder = $folder = DataObject::get_by_id('Folder', 208);
 		error_log("post get folder");
 
 		//FIXME - hardwired for testing
 		if($folder) {
 			error_log("Found folder");
 			$upload_folder = UploadifyField::relative_asset_dir($folder->Filename);
-		} 
+		} else {
+			return 'error';//FIXME better error reporting
+		}
 
 error_log("T3");	
 	
