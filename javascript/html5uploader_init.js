@@ -135,6 +135,10 @@ $(function() {
         return text;
     }
 
+    function setProgress(slug, percent) {
+    	
+    }
+
 	$("#dropbox, #multiple").html5Uploader({
 		name: "upload",
 		postUrl: "/html5upload",
@@ -159,32 +163,46 @@ $(function() {
 
 			if (r) {
 				console.log("RESPONSE:"+r);
-				file_id = eval('('+r+')');
+				file_id = eval('('+r+')').file_id;
 				console.log(file_id.file_id);
 
-				// this file id is inserted into the .inputs panel with hidden IDs,
-				// it will then be updated on the completion of the upload sequence
+				console.log("OPTS");
+			console.log(opts);
+console.log("Refresh link:"+opts.refreshlink);
+				console.log('***********');
 
-				var domel = $('#UploadFolderID_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles');
-				
-				var inputs = $('.inputs', domel);
-				console.log(domel);
-				inputs.append('<p>++++Test</p>');
+			//FIXME - understand the id thing here instead of upload_preview_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles
+		
+//			$preview = $('#upload_preview_'+$e.attr('id'));
+			$preview = $('#upload_preview_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles');
+			$inputs = $('.inputs input', $preview);
+			console.log("INPUTS");
+			console.log($inputs);	
+			if($preview.length) {
+				ids = new Array();
+				$inputs.each(function() {
+				if($(this).val().length) {
+					ids.push($(this).val());
+				}
+			});
+			
 
+				ids.push(file_id);
 
-				/*
-				<div class="inputs">
-	
-		
-			<input type="hidden" name="UploadedFiles[]" value="262">
-		
-			<input type="hidden" name="UploadedFiles[]" value="263">
-		
-			<input type="hidden" name="UploadedFiles[]" value="264">
-		
-	
-</div>
-*/
+			console.log("IDS:"+ids);
+
+			
+									
+			$.ajax({
+				url: opts.refreshlink,
+				data: {'FileIDs' : ids.join(",")},
+				async: false,
+				dataType: "json",
+				success: function(data) {
+					$preview.html(data.html);
+				}
+				});
+			}
 
 
 			}
@@ -211,7 +229,7 @@ $(function() {
         },
         onClientLoad: function (e, file)
         {
-            $("#" + slugify(file.name)).find(".preview").append("<img width=\"50\" height=\"50\" src=\"" + e.target.result + "\" alt=\"\">");
+            $("#" + slugify(file.name)).find(".preview").append("<img style=\"width:50px; height:50px;\" src=\"" + e.target.result + "\" alt=\"\">");
         },
         onServerLoadStart: function (e, file)
         {
@@ -225,47 +243,6 @@ $(function() {
         	console.log(file);
 
             $("#" + slugify(file.name)).find(".progressbar").html('100%');
-            alert('completed');
-
-console.log("OPTS");
-			console.log(opts);
-console.log("Refresh link:"+opts.refreshlink);
-				console.log('***********');
-
-			//FIXME - understand the id thing here instead of upload_preview_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles
-		
-//			$preview = $('#upload_preview_'+$e.attr('id'));
-			$preview = $('#upload_preview_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles');
-			$inputs = $('.inputs input', $preview);
-			console.log("INPUTS");
-			console.log($inputs);	
-			if($preview.length) {
-				ids = new Array();
-				$inputs.each(function() {
-				if($(this).val().length) {
-					ids.push($(this).val());
-				}
-			});
-			
-			//ids.push(262);
-			//ids.push(263);
-			//ids.push(264);
-
-			console.log("IDS:"+ids);
-
-			
-									
-			$.ajax({
-				url: opts.refreshlink,
-				data: {'FileIDs' : ids.join(",")},
-				async: false,
-				dataType: "json",
-				success: function(data) {
-					$preview.html(data.html);
-				}
-				});
-			}
-
 
             $("#" + slugify(file.name)).html('');
         },
@@ -276,6 +253,7 @@ console.log("Refresh link:"+opts.refreshlink);
             {
                 var percentComplete = (e.loaded / e.total) * 100;
                 $("#" + slugify(file.name)).find(".progressbar").html(percentComplete+'%');
+                console.log("Uploaded "+percentComplete);
             }
         },
 
