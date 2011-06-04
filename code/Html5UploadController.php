@@ -1,5 +1,4 @@
 <?php
-
 class Html5UploadController extends Controller {
 
 	//accessible via /html5upload
@@ -46,7 +45,6 @@ error_log("T3");
 			$to_path = $assets_folder_fs.'/'.$upload_folder.$_FILES['upload']['name'];
 			error_log("TO:".$to_path );
         	if( move_uploaded_file( $_FILES['upload']['tmp_name'] , $to_path ) ) {
-                echo 'done';
                 error_log("FILES T1a");
         	}
         	error_log("FILES T2");
@@ -144,7 +142,11 @@ error_log("T3");
 			$file->write();
 
 			error_log("FILE ID:".$file->ID);
-			echo $file->ID;
+
+			$arr = array ('file_id'=>$file->ID);
+
+			echo json_encode($arr);
+
 
 
 
@@ -168,13 +170,9 @@ error_log("T3");
 
         if(file_put_contents($upload_folder.'/'.$headers['UP-FILENAME'], $content)) {
                 error_log("T8");
-                echo '';
         }
         exit();
 }
-
-echo "alert('uploaded');";
-
 		/*
 		if(isset($_FILES["Filedata"]) && is_uploaded_file($_FILES["Filedata"]["tmp_name"])) {
 			$upload_folder = urldecode($r->requestVar('uploadFolder'));
@@ -197,3 +195,4 @@ echo "alert('uploaded');";
 		*/
 	}
 }
+?>
