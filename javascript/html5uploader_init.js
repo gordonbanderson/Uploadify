@@ -236,8 +236,8 @@ $(function() {
         	console.log("CLIENT ON LOAD:");
         	//console.log(e);
         	//console.log(file);
-           // $("#" + slugify(file.name)).find(".preview").append('<p>'+file.name+'</p>');
-            alert(file.name);
+            setProgress(file.name, 0);
+            //alert(file.name);
         },
         onServerLoadStart: function (e, file)
         {
