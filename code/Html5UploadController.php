@@ -1,9 +1,74 @@
 <?php
 class Html5UploadController extends Controller {
 
-	//accessible via /html5upload
+
+
 
 	public function index(SS_HTTPRequest $r) {
+		error_log("UPLOAIFY UPLOADER");
+		if(isset($_FILES["upload"]) && is_uploaded_file($_FILES["upload"]["tmp_name"])) {
+			error_log("FIrst vars ok");
+			$upload_folder = urldecode($r->requestVar('uploadFolder'));
+
+			if(isset($_REQUEST['FolderID'])) {
+				error_log("FOLDER:".$_REQUEST['FolderID']);
+				if($folder = DataObject::get_by_id("Folder", Convert::raw2sql($_REQUEST['FolderID']))) {
+					$upload_folder = UploadifyField::relative_asset_dir($folder->Filename);
+				}
+			}
+
+						error_log("UPLOAD FOLDER:".$upload_folder);
+
+
+ 
+			$ext = strtolower(end(explode('.', $_FILES['upload']['name'])));
+
+			error_log("EXTENSION:".$ext);
+
+
+			$mime_type = $_FILES['upload']['type'];
+			$mime_parts = split('/', $mime_type);
+			$core_mime = $mime_parts[0];
+			error_log("Core mime:".$core_mime);
+
+
+			$file = null;
+
+			if ($core_mime == 'image') {
+				error_log("Creating image");
+				$file = new Image();
+			} else {
+				error_log("Creating file");
+				$file = new File();
+			}
+
+
+			
+			$u = new Upload();
+			error_log("About to load into");
+			error_log(print_r($_FILES, 1));
+			$u->loadIntoFile($_FILES['upload'], $file, $upload_folder);
+			error_log("Loaded into file");
+			$file->write();
+
+			error_log("FILE ID:".$file->ID);
+
+
+			$arr = array ('file_id'=>$file->ID);
+
+			echo json_encode($arr);
+
+		} 
+		else {
+			echo ' '; // return something or SWFUpload won't fire uploadSuccess
+		}	
+	}
+
+
+
+	//accessible via /html5upload
+
+	public function indexOLD(SS_HTTPRequest $r) {
 
 		error_log("ASSETS DIR:".ASSETS_DIR);
 		error_log("BASE FOLDER:".Director::baseFolder());
@@ -82,6 +147,9 @@ error_log("T3");
 
 			//$file = new $class();
 
+			error_log("FILES:");
+			error_log(print_r($FILES,1));
+
 			$name = $_FILES['upload']['name'];
 			$mime_type = $_FILES['upload']['type'];
 			$mime_parts = split('/', $mime_type);
@@ -98,6 +166,12 @@ error_log("T3");
 				error_log("Creating file");
 				$file = new File();
 			}
+
+
+		
+//echo $file->ID;
+
+/*
 
 
 			error_log("Core file object created:".$file);
@@ -124,8 +198,8 @@ error_log("T3");
 
 			$file->Filename = $relative_file_path;
 
-
-			error_log("FILE:".$file);
+*/
+			error_log("UNPOPULATED FILE:".$file);
 
 			//$u = new Upload();
 			//error_log("UPLOAD:".$u);
@@ -138,9 +212,18 @@ error_log("T3");
 				$file->ParentID = $folder->ID;
 			}
 
-			
-			$file->write();
 
+			//$upload_folder = $assets_folder_fs.'/'.$upload_folder.$_FILES['upload']['name'];
+			
+			error_log("UPLOAD FOLDER:".$upload_folder);
+
+
+			error_log("UPLOAD - loading file into ********");
+			error_log(print_r($_FILES['upload'],1));
+
+			$u = new Upload();
+			$u->loadIntoFile($_FILES['upload'], $file, $upload_folder);
+			$file->write();
 			error_log("FILE ID:".$file->ID);
 
 			$arr = array ('file_id'=>$file->ID);
