@@ -24,7 +24,6 @@
 
 
  </STYLE>
-</HEAD>
 
 
 <div class="field UploadifyField backend">
@@ -44,16 +43,16 @@
 			<div class="middleColumn">
 
 
-<div id="dropbox">DROP BOX</div>
-<input id="multiple" type="file" multiple>
+<input id="multiple" type="file"  multiple>
 
 <div id="dropboxStatus">Drop box status here</div>
 
 
-				<div class="button_wrapper">
+				<div class="button_wrapper" style="display:none;">
 					<a class="uploadify_button upload">$ButtonText</a>
 					<div class="object_wrapper">
-						<input type="file" class="uploadify { $Metadata }" name="$Name" id="$id" />
+					
+						<input type="file" style="display:none;" class="uploadify { $Metadata }" name="$Name" id="$id" />
 					</div>
 				</div>
 				<% if CanSelectFolder %>
