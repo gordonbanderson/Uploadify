@@ -45,7 +45,7 @@
 
 <input id="multiple" type="file"  multiple>
 
-<div id="dropboxStatus">Drop box status here</div>
+<div id="dropboxStatus">&nbsp;</div>
 
 
 				<div class="button_wrapper" style="display:none;">
