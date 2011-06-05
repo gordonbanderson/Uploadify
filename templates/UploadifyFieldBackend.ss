@@ -5,8 +5,6 @@
 	}
 
    .progressbar {
-   	background: yellow;
-   	color: red;
    	display: inline;
    	//width: 180px;
    	//float: left;
@@ -14,14 +12,12 @@
 
    .preview {
    	display: inline;
-   	background: pink;
    //	flaot: left;
    }
    
 
    .filename {
    	display: inline;
-   	background: cyan;
   // 	float:left;
    	padding-left: 10px;
    }
