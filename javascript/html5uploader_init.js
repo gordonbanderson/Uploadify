@@ -191,7 +191,7 @@ $(function() {
 			});
 			
 
-				ids.push(file_id);
+			ids.push(file_id);
 
 			console.log("IDS:"+ids);
 
@@ -207,6 +207,9 @@ $(function() {
 				}
 				});
 			}
+
+
+			$("#" + slugify(file.name)).html('');
 
 
 			}
@@ -255,7 +258,7 @@ $(function() {
            // $("#" + slugify(file.name)).find(".progressbar").html('100%');
             setProgress(file.name, 100);
 
-            //$("#" + slugify(file.name)).html('');
+            
         },
 
         onServerProgress: function (e, file)
