@@ -10,14 +10,18 @@ class Html5UploadController extends Controller {
 			error_log("FIrst vars ok");
 			$upload_folder = urldecode($r->requestVar('uploadFolder'));
 
+			$folder = null;
+
 			if(isset($_REQUEST['FolderID'])) {
 				error_log("FOLDER:".$_REQUEST['FolderID']);
 				if($folder = DataObject::get_by_id("Folder", Convert::raw2sql($_REQUEST['FolderID']))) {
+					error_log("Getting folder");
 					$upload_folder = UploadifyField::relative_asset_dir($folder->Filename);
+					error_log("FOLDER FROM PARAM:".$upload_folder);
 				}
 			}
 
-						error_log("UPLOAD FOLDER:".$upload_folder);
+			error_log("UPLOAD FOLDER:".$upload_folder);
 
 
  
@@ -45,10 +49,20 @@ class Html5UploadController extends Controller {
 
 			
 			$u = new Upload();
-			error_log("About to load into");
+			error_log("About to load into $upload_folder");
 			error_log(print_r($_FILES, 1));
+
+
 			$u->loadIntoFile($_FILES['upload'], $file, $upload_folder);
 			error_log("Loaded into file");
+
+			if ($folder) {
+				error_log("Setting parent id from folder id ".$folder->ID);
+
+				$file->ParentID = $folder->ID;
+			}
+
+
 			$file->write();
 
 			error_log("FILE ID:".$file->ID);
