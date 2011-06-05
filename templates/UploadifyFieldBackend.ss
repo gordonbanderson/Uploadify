@@ -1,3 +1,36 @@
+<STYLE type="text/css">
+
+	.dropboxStatus div {
+		display: inline;
+	}
+
+   .progressbar {
+   	background: yellow;
+   	color: red;
+   	display: inline;
+   	//width: 180px;
+   	//float: left;
+   }
+
+   .preview {
+   	display: inline;
+   	background: pink;
+   //	flaot: left;
+   }
+   
+
+   .filename {
+   	display: inline;
+   	background: cyan;
+  // 	float:left;
+   	padding-left: 10px;
+   }
+
+
+ </STYLE>
+</HEAD>
+
+
 <div class="field UploadifyField backend">
 	<div class="horizontal_tab_wrap Uploadify">
 	  <div class="tabNavigation clearfix">
