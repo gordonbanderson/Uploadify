@@ -122,9 +122,10 @@ $(function() {
 
 
 	var fileTemplate = "<div id=\"{{id}}\">";
-    fileTemplate += "<div class=\"progressbar\"></div>";
-    fileTemplate += "<div class=\"preview\"></div>";
+    fileTemplate += "<div class=\"progressbar\">&nbsp;</div>";
     fileTemplate += "<div class=\"filename\">{{filename}}</div>";
+
+    fileTemplate += "<div class=\"preview\"></div>";
     fileTemplate += "</div>";
 
     function slugify(text)
@@ -135,8 +136,9 @@ $(function() {
         return text;
     }
 
-    function setProgress(slug, percent) {
-    	
+    function setProgress(name, percent) {
+    	 $("#" + slugify(name)).find(".progressbar").html(Math.round(percent)+'%');
+
     }
 
 	$("#dropbox, #multiple").html5Uploader({
@@ -166,10 +168,12 @@ $(function() {
 				file_id = eval('('+r+')').file_id;
 				console.log(file_id.file_id);
 
-				console.log("OPTS");
-			console.log(opts);
-console.log("Refresh link:"+opts.refreshlink);
-				console.log('***********');
+				//setProgress(100); //signify done
+
+				//console.log("OPTS");
+				//console.log(opts);
+				//console.log("Refresh link:"+opts.refreshlink);
+				//console.log('***********');
 
 			//FIXME - understand the id thing here instead of upload_preview_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles
 		
@@ -229,11 +233,17 @@ console.log("Refresh link:"+opts.refreshlink);
         },
         onClientLoad: function (e, file)
         {
-            $("#" + slugify(file.name)).find(".preview").append("<img style=\"width:50px; height:50px;\" src=\"" + e.target.result + "\" alt=\"\">");
+        	console.log("CLIENT ON LOAD:");
+        	//console.log(e);
+        	//console.log(file);
+           // $("#" + slugify(file.name)).find(".preview").append('<p>'+file.name+'</p>');
+            alert(file.name);
         },
         onServerLoadStart: function (e, file)
         {
-            $("#" + slugify(file.name)).find(".progressbar").html('0%');
+           // $("#" + slugify(file.name)).find(".progressbar").html('0%');
+                            setProgress(file.name, 0);
+
         },
 
         onServerLoad: function (e, file)
@@ -242,9 +252,10 @@ console.log("Refresh link:"+opts.refreshlink);
         	console.log(e);
         	console.log(file);
 
-            $("#" + slugify(file.name)).find(".progressbar").html('100%');
+           // $("#" + slugify(file.name)).find(".progressbar").html('100%');
+            setProgress(file.name, 100);
 
-            $("#" + slugify(file.name)).html('');
+            //$("#" + slugify(file.name)).html('');
         },
 
         onServerProgress: function (e, file)
@@ -252,7 +263,8 @@ console.log("Refresh link:"+opts.refreshlink);
             if (e.lengthComputable)
             {
                 var percentComplete = (e.loaded / e.total) * 100;
-                $("#" + slugify(file.name)).find(".progressbar").html(percentComplete+'%');
+                //$("#" + slugify(file.name)).find(".progressbar").html(percentComplete+'%');
+                setProgress(file.name, percentComplete);
                 console.log("Uploaded "+percentComplete);
             }
         },
