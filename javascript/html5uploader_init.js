@@ -12,6 +12,7 @@ $(function() {
 				name = $input.attr('name');
 				id = $input.attr('id');
 				klass = $input.attr('class');
+				console.log("****** "+$id);
 				var $uploader = $('<input type="hidden" class="'+klass+'" name="'+name+'" id="'+id+'" disabled="disabled"/>');
 				$input.replaceWith($uploader);
 			}
@@ -141,32 +142,37 @@ $(function() {
 
     }
 
-	$("#dropbox, #multiple").html5Uploader({
+	$(".html5uploadbutton").html5Uploader({
 		name: "upload",
 		postUrl: "/html5upload",
+		srcId: $(this).attr('id'),
 
-		onClientLoadStart:function(e,file){console.log("On client start")},
-		onClientError:function(e,file){console.log("On client error")},
-		onClientLoadEnd:function(e,file){console.log("On client load end")},
-		onClientProgress:function(e,file){console.log("On client load progress")},
-		onServerAbort:function(e,file){console.log("On server abort")},
-		onServerError:function(e,file){console.log("On server error")},
-		onServerLoad:function(e,file){console.log("On server load")},
-		onServerProgress:function(e,file){console.log("On server progress")},
-		onServerReadyStateChange:function(e,file){
+		
+		onClientError:function(e,file,uploaderDomElement){console.log("On client error")},
+		onClientLoadEnd:function(e,file,uploaderDomElement){console.log("On client load end")},
+		onClientProgress:function(e,file,uploaderDomElement){console.log("On client load progress")},
+		onServerAbort:function(e,file,uploaderDomElement){console.log("On server abort")},
+		onServerError:function(e,file,uploaderDomElement){console.log("On server error")},
+		onServerLoad:function(e,file,uploaderDomElement){console.log("On server load")},
+		onServerProgress:function(e,file,uploaderDomElement){console.log("On server progress")},
+		onServerReadyStateChange:function(e,file,uploaderDomElement){
 			//.log($(this));
 
-			//console.log("On server ready state change: EVENT");
-			//console.log(e);
+			console.log("On server ready state change: EVENT");
+			console.log(e);
+
+			console.log("ORIG DOM ELEMENT:");
+			console.log(uploaderDomElement);
+			var uploaderId = uploaderDomElement.attr('id');
 			//console.log(e.srcElement);
-			//console.log(file);
+			console.log(file);
 
 			r = e.srcElement.response;
 
 			if (r) {
 				console.log("RESPONSE:"+r);
 				file_id = eval('('+r+')').file_id;
-				console.log(file_id.file_id);
+				//console.log(file_id.file_id);
 
 				//setProgress(100); //signify done
 
@@ -176,9 +182,12 @@ $(function() {
 				//console.log('***********');
 
 			//FIXME - understand the id thing here instead of upload_preview_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles
-		
+		//html5Uploader
 //			$preview = $('#upload_preview_'+$e.attr('id'));
-			$preview = $('#upload_preview_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles');
+
+			$preview = $('#upload_preview_'+uploaderId);
+
+			//$preview = $('#upload_preview_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles');
 			$inputs = $('.inputs input', $preview);
 			console.log("INPUTS");
 			console.log($inputs);	
@@ -225,31 +234,38 @@ $(function() {
 
 		},
 
-		 onClientLoadStart: function (e, file)
+		 onClientLoadStart: function (e,file,uploaderDomElement)
         {
             var upload = $("#dropboxStatus");
+
+            console.log("Client load start");
+            console.log(e);
             if (upload.is(":hidden"))
             {
                 upload.show();
             }
             upload.append(fileTemplate.replace(/{{id}}/g, slugify(file.name)).replace(/{{filename}}/g, file.name));
         },
-        onClientLoad: function (e, file)
+        onClientLoad: function (e, file,uploaderDomElement)
         {
         	console.log("CLIENT ON LOAD:");
         	//console.log(e);
         	//console.log(file);
             setProgress(file.name, 0);
+
+            $domEl = $(e.currentTarget);
+            console.log($domEl.attr('id'));
+
             //alert(file.name);
         },
-        onServerLoadStart: function (e, file)
+        onServerLoadStart: function (e, file,uploaderDomElement)
         {
            // $("#" + slugify(file.name)).find(".progressbar").html('0%');
                             setProgress(file.name, 0);
 
         },
 
-        onServerLoad: function (e, file)
+        onServerLoad: function (e, file,uploaderDomElement)
         {
         	console.log("On server load");
         	console.log(e);
@@ -261,7 +277,7 @@ $(function() {
             
         },
 
-        onServerProgress: function (e, file)
+        onServerProgress: function (e, file,uploaderDomElement)
         {
             if (e.lengthComputable)
             {

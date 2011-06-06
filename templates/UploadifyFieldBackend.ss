@@ -43,7 +43,7 @@
 			<div class="middleColumn">
 
 
-<input id="multiple" type="file"  multiple>
+<input id="$id" type="file" class="html5uploadbutton"  multiple>
 
 <div id="dropboxStatus">&nbsp;</div>
 
@@ -52,7 +52,7 @@
 					<a class="uploadify_button upload">$ButtonText</a>
 					<div class="object_wrapper">
 					
-						<input type="file" style="display:none;" class="uploadify { $Metadata }" name="$Name" id="$id" />
+						<input type="file" style="display:none;" class="uploadify { $Metadata }" name="$Name"  />
 					</div>
 				</div>
 				<% if CanSelectFolder %>
