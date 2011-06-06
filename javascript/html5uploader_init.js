@@ -1,6 +1,6 @@
 jQuery.noConflict();
 
-//console.log('html5 init');
+console.log('html5 init');
 
 (function($) {
 $(function() {
@@ -12,7 +12,7 @@ $(function() {
 				name = $input.attr('name');
 				id = $input.attr('id');
 				klass = $input.attr('class');
-				//console.log("****** "+$id);
+				console.log("****** "+$id);
 				var $uploader = $('<input type="hidden" class="'+klass+'" name="'+name+'" id="'+id+'" disabled="disabled"/>');
 				$input.replaceWith($uploader);
 			}
@@ -24,8 +24,8 @@ $(function() {
 			 														**/			
 
 			opts = $uploader.metadata();
-			//console.log("METADATA");
-			//console.log(opts);
+			console.log("METADATA");
+			console.log(opts);
 
 			$.extend(opts, {
 				onComplete: function(event, queueID, fileObj, response, data) {
@@ -116,7 +116,7 @@ $(function() {
 
 			// invoke the HTML5 uploader
 			//$uploader.uploadify(opts);
-			//console.log("About to involder html5 uploader");
+			console.log("About to involder html5 uploader");
 			//z = new displayMessage('wombles');
 			//var uploddr = new uploader('drop', 'status', '/html5upload', 'list');
 
@@ -148,31 +148,38 @@ $(function() {
 		srcId: $(this).attr('id'),
 
 		
+		onClientError:function(e,file,uploaderDomElement){console.log("On client error")},
+		onClientLoadEnd:function(e,file,uploaderDomElement){console.log("On client load end")},
+		onClientProgress:function(e,file,uploaderDomElement){console.log("On client load progress")},
+		onServerAbort:function(e,file,uploaderDomElement){console.log("On server abort")},
+		onServerError:function(e,file,uploaderDomElement){console.log("On server error")},
+		onServerLoad:function(e,file,uploaderDomElement){console.log("On server load")},
+		onServerProgress:function(e,file,uploaderDomElement){console.log("On server progress")},
 		onServerReadyStateChange:function(e,file,uploaderDomElement){
 			//.log($(this));
 
-			//console.log("On server ready state change: EVENT");
-			//console.log(e);
+			console.log("On server ready state change: EVENT");
+			console.log(e);
 
-			//console.log("ORIG DOM ELEMENT:");
-			//console.log(uploaderDomElement);
+			console.log("ORIG DOM ELEMENT:");
+			console.log(uploaderDomElement);
 			var uploaderId = uploaderDomElement.attr('id');
-			////console.log(e.srcElement);
-			//console.log(file);
+			//console.log(e.srcElement);
+			console.log(file);
 
 			r = e.srcElement.response;
 
 			if (r) {
-				//console.log("RESPONSE:"+r);
+				console.log("RESPONSE:"+r);
 				file_id = eval('('+r+')').file_id;
-				////console.log(file_id.file_id);
+				//console.log(file_id.file_id);
 
 				//setProgress(100); //signify done
 
-				////console.log("OPTS");
-				////console.log(opts);
-				////console.log("Refresh link:"+opts.refreshlink);
-				////console.log('***********');
+				//console.log("OPTS");
+				//console.log(opts);
+				//console.log("Refresh link:"+opts.refreshlink);
+				//console.log('***********');
 
 			//FIXME - understand the id thing here instead of upload_preview_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles
 		//html5Uploader
@@ -182,8 +189,8 @@ $(function() {
 
 			//$preview = $('#upload_preview_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles');
 			$inputs = $('.inputs input', $preview);
-			//console.log("INPUTS");
-			//console.log($inputs);	
+			console.log("INPUTS");
+			console.log($inputs);	
 			if($preview.length) {
 				ids = new Array();
 				$inputs.each(function() {
@@ -195,7 +202,7 @@ $(function() {
 
 			ids.push(file_id);
 
-			//console.log("IDS:"+ids);
+			console.log("IDS:"+ids);
 
 			
 									
@@ -231,8 +238,8 @@ $(function() {
         {
             var upload = $("#dropboxStatus");
 
-            //console.log("Client load start");
-            //console.log(e);
+            console.log("Client load start");
+            console.log(e);
             if (upload.is(":hidden"))
             {
                 upload.show();
@@ -241,13 +248,13 @@ $(function() {
         },
         onClientLoad: function (e, file,uploaderDomElement)
         {
-        	//console.log("CLIENT ON LOAD:");
-        	////console.log(e);
-        	////console.log(file);
+        	console.log("CLIENT ON LOAD:");
+        	//console.log(e);
+        	//console.log(file);
             setProgress(file.name, 0);
 
             $domEl = $(e.currentTarget);
-            //console.log($domEl.attr('id'));
+            console.log($domEl.attr('id'));
 
             //alert(file.name);
         },
@@ -260,9 +267,9 @@ $(function() {
 
         onServerLoad: function (e, file,uploaderDomElement)
         {
-        	//console.log("On server load");
-        	//console.log(e);
-        	//console.log(file);
+        	console.log("On server load");
+        	console.log(e);
+        	console.log(file);
 
            // $("#" + slugify(file.name)).find(".progressbar").html('100%');
             setProgress(file.name, 100);
@@ -277,7 +284,7 @@ $(function() {
                 var percentComplete = (e.loaded / e.total) * 100;
                 //$("#" + slugify(file.name)).find(".progressbar").html(percentComplete+'%');
                 setProgress(file.name, percentComplete);
-                //console.log("Uploaded "+percentComplete);
+                console.log("Uploaded "+percentComplete);
             }
         },
 
@@ -286,7 +293,7 @@ $(function() {
 
 
 
-			//console.log("invoked html5 uploader");
+			console.log("invoked html5 uploader");
 
 
 
@@ -347,11 +354,11 @@ $(function() {
 	
 	// Change folder ajax post
 	$('.folder_select').find(':submit').live("click", function() {
-		//console.log("Changing folder");
+		console.log("Changing folder");
 		$t = $(this);
 		$target = $(this).parents('.UploadifyField').find('.html5uploadbutton');
-		//console.log("CF: TARGET");
-		//console.log($target);
+		console.log("CF: TARGET");
+		console.log($target);
 
 		$folderSelect = $('#folder_select_'+$target.attr('id'));
 
@@ -359,11 +366,11 @@ $(function() {
 
 		folder_id = $('select:first', $folderSelect).val();
 
-		//console.log("FOLDER ID:"+folder_id);
+		console.log("FOLDER ID:"+folder_id);
 
 		new_folder = $('input:first', $folderSelect).val();
 
-		//console.log("NEW FOLDER:"+new_folder);
+		console.log("NEW FOLDER:"+new_folder);
 
 		$folderSelect.parents('.folder_select_wrap').load(
 			$t.metadata().url, 
