@@ -293,45 +293,6 @@ $(function() {
 
 
 
-/*
-$(function ()
-{
-    var fileTemplate = "<div id=\"{{id}}\">";
-    fileTemplate += "<div class=\"progressbar\"></div>";
-    fileTemplate += "<div class=\"preview\"></div>";
-    fileTemplate += "<div class=\"filename\">{{filename}}</div>";
-    fileTemplate += "</div>";
-
-    function slugify(text)
-    {
-        text = text.replace(/[^-a-zA-Z0-9,&\s]+/ig, '');
-        text = text.replace(/-/gi, "_");
-        text = text.replace(/\s/gi, "-");
-        return text;
-    }
-    $("#dropbox").html5Uploader(
-    {
-       
-        
-        
-       
-    });
-    $(".download").mousedown(function ()
-    {
-        $(this).css(
-        {
-            "background-image": "url('images/download-clicked.png')"
-        });
-    }).mouseup(function ()
-    {
-        $(this).css(
-        {
-            "background-image": "url('images/download.png')"
-        });
-    }); 
-});
-*/
-
 			console.log("invoked html5 uploader");
 
 
@@ -395,18 +356,28 @@ $(function ()
 	$('.folder_select').find(':submit').live("click", function() {
 		console.log("Changing folder");
 		$t = $(this);
-		$target = $(this).parents('.UploadifyField').find('.uploadify');
+		$target = $(this).parents('.UploadifyField').find('.html5uploadbutton');
+		console.log("CF: TARGET");
+		console.log($target);
+
 		$folderSelect = $('#folder_select_'+$target.attr('id'));
+
+		//$folderSelect.html('WIBBLE');
+
 		folder_id = $('select:first', $folderSelect).val();
+
+		console.log("FOLDER ID:"+folder_id);
+
 		new_folder = $('input:first', $folderSelect).val();
+
+		console.log("NEW FOLDER:"+new_folder);
+
 		$folderSelect.parents('.folder_select_wrap').load(
 			$t.metadata().url, 
 			{ FolderID : folder_id, NewFolder : new_folder}
 		);
 
-		// change the post URL of the html5 uploader to ensure the correct folder is used
-		//html5uploader.postUrl = '/html5upload?FolderID='+
-		//$('#UploadFolderID_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles').val();
+		
 
 		return false;
 	});
