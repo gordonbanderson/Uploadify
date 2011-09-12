@@ -6,6 +6,11 @@ class Html5UploadController extends Controller {
 
 	public function index(SS_HTTPRequest $r) {
 
+		error_log("Uploading via HTML5\nFILES:");
+
+		error_log(print_r($_FILES,1));
+		error_log("/FILES");
+
 		$trace = ("UPLOAIFY UPLOADER\n    ");
 		if(isset($_FILES["upload"]) && is_uploaded_file($_FILES["upload"]["tmp_name"])) {
 			$trace .= ("FIrst vars ok\n    ");
@@ -71,18 +76,19 @@ class Html5UploadController extends Controller {
 
 			$arr = array ('file_id'=>$file->ID, 'trace' => $trace);
 
-			echo json_encode($arr);
+			
 
-
+			error_log("TRACE HTML5 UPLOAD");
 			error_log($trace);
 
+			echo json_encode($arr);
 		} 
 		else {
-			echo ' '; // return something or SWFUpload won't fire uploadSuccess
-		}	
+			error_log("Upload fields not set");
+			echo 'success'; // return something or SWFUpload won't fire uploadSuccess
+		}
 	}
 
 
 
-}
-?>
+}?>
