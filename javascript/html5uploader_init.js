@@ -54,6 +54,7 @@ $(function() {
 								dataType: "json",
 								success: function(data) {
 									$preview.html(data.html);
+									alert('T1');
 								}
 							});
 						}
@@ -167,60 +168,70 @@ $(function() {
 			//console.log(e.srcElement);
 			console.log(file);
 
+			r = $.trim(e.srcElement.response);
 			r = e.srcElement.response;
 
+//alert("RESPONSE:*"+r+'*');
+
 			if (r) {
-				console.log("RESPONSE:"+r);
-				file_id = eval('('+r+')').file_id;
-				//console.log(file_id.file_id);
-
-				//setProgress(100); //signify done
-
-				//console.log("OPTS");
-				//console.log(opts);
-				//console.log("Refresh link:"+opts.refreshlink);
-				//console.log('***********');
-
-			//FIXME - understand the id thing here instead of upload_preview_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles
-		//html5Uploader
-//			$preview = $('#upload_preview_'+$e.attr('id'));
-
-			$preview = $('#upload_preview_'+uploaderId);
-
-			//$preview = $('#upload_preview_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles');
-			$inputs = $('.inputs input', $preview);
-			console.log("INPUTS");
-			console.log($inputs);	
-			if($preview.length) {
-				ids = new Array();
-				$inputs.each(function() {
-				if($(this).val().length) {
-					ids.push($(this).val());
+				if(r != 'success') {
+					console.log("RESPONSE:"+r);
+					file_id = eval('('+r+')').file_id;
 				}
-			});
-			
+					//console.log(file_id.file_id);
 
-			ids.push(file_id);
+					//setProgress(100); //signify done
 
-			console.log("IDS:"+ids);
+					//console.log("OPTS");
+					//console.log(opts);
+					//console.log("Refresh link:"+opts.refreshlink);
+					//console.log('***********');
 
-			
-									
-			$.ajax({
-				url: opts.refreshlink,
-				data: {'FileIDs' : ids.join(",")},
-				async: false,
-				dataType: "json",
-				success: function(data) {
-					$preview.html(data.html);
-				}
+				//FIXME - understand the id thing here instead of upload_preview_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles
+				//html5Uploader
+				//			$preview = $('#upload_preview_'+$e.attr('id'));
+
+				$preview = $('#upload_preview_'+uploaderId);
+
+				//$preview = $('#upload_preview_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles');
+				$inputs = $('.inputs input', $preview);
+				console.log("INPUTS");
+				console.log($inputs);	
+				if($preview.length) {
+					ids = new Array();
+					$inputs.each(function() {
+					if($(this).val().length) {
+						ids.push($(this).val());
+					}
 				});
-			}
 
 
-			$("#" + slugify(file.name)).html('');
+				if (r != 'success') {
+					ids.push(file_id);
+				}
+
+				//alert("IDS:"+ids.length);
 
 
+				if (ids.length > 0) {				
+console.log(opts);
+					$.ajax({
+						url: opts.refreshlink,
+						data: {'FileIDs' : ids.join(",")},
+						async: false,
+						dataType: "json",
+						success: function(data) {
+							//alert('T2');
+							//$preview.html(data.html);
+							$(data.html).insertAfter($('.no_files'));
+						}
+						});
+					}
+				}
+
+				$("#" + slugify(file.name)).html('');
+
+				
 			}
 		
 			/*
@@ -451,6 +462,7 @@ $(function() {
 				
 			}
 		});
+		alert('T3');
 		return false;
 	});
 });
