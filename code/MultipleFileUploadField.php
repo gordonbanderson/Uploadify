@@ -94,19 +94,49 @@ class MultipleFileUploadField extends UploadifyField
 	 */
 	public function refresh() {
 		ContentNegotiator::disable();
+		error_log("REFRESH MULTI");
 		$count = 0;
 		$before = is_array($this->Value()) ? sizeof($this->Value()) : 0;
 		if(isset($_REQUEST['FileIDs'])) {
+
 			$ids = explode(",",$_REQUEST['FileIDs']);
+		error_log("REFRESHIDS:".print_r($ids,1));
+
 			if(is_array($ids)) {
 				$this->setValue($ids);
 				$count = sizeof($ids) - $before;
 			}
-		}	
+		}
+
+		$fid = $ids[0];
+		error_log("FID:".$fid);
+
+
+		//fixme - is this sufficient?
+		$this->lastUploadedFile = DataObject::get_by_id('File', $fid);
+		
+		error_log("LUPF:".$this->lastUploadedFile);
 		return Convert::array2json(array(
-			'html' => $this->renderWith('AttachedFiles'),
+			'html' => $this->renderWith('UploadedAttachedFile'),
 			'success' => sprintf(_t('Uploadify.SUCCESSFULADDMULTI','Added files successfully.'), $count)
 		));
+	}
+
+
+	public function LastUploadedFile() {
+		error_log("LAST UPLOADED FILE:".$this->lastUploadedFile);
+		$file = $this->lastUploadedFile;
+		if(is_subclass_of($file->ClassName, "Image") || $file->ClassName == "Image") {
+			$image = ($file->ClassName != "Image") ? $file->newClassInstance("Image") : $file;
+			if($thumb = $image->CroppedImage(32,32)) {
+				$image->Thumb = $thumb->URL;						
+			}
+		}
+		else {
+			$file->Thumb = $file->Icon();
+		}
+
+		return $file;
 	}
 	
 	/**
