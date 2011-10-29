@@ -214,16 +214,31 @@ $(function() {
 
 
 				if (ids.length > 0) {				
-console.log(opts);
+console.debug(opts);
+console.debug('IDS');
+console.debug(ids);
 					$.ajax({
 						url: opts.refreshlink,
 						data: {'FileIDs' : ids.join(",")},
-						async: false,
+						async: true,
 						dataType: "json",
 						success: function(data) {
 							//alert('T2');
 							//$preview.html(data.html);
-							$(data.html).insertAfter($('.no_files'));
+							console.debug(data['FileIDs']);
+							// this is the image id
+							var imageId = data['lastUploadedFileID'];
+
+							// element containing the image
+							var domId = 'file-'+imageId; 
+							var li = document.getElementById(domId);
+							
+							if (li == null) {
+								$(data.html).insertAfter($('.no_files'));
+							} else {
+								$(domId).html(data.html);
+							};
+							//var li = $('file-'+)
 						}
 						});
 					}
