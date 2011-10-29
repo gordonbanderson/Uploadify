@@ -4,9 +4,11 @@
 	ID:$id
 
 	<ul id="uploadifyFileList$ID" class="<% if Sortable %>sortable {'url' : '$Link(dosort)'}<% end_if %>">
+		<% if Files %>
 		<% control Files %>
 			<% include AttachedFile %>
 		<% end_control %>
+		<% end_if %>
 	</ul>
 	<% if Files %>
 
