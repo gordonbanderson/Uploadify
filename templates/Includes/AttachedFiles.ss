@@ -1,6 +1,8 @@
 <div class="file_heading"><% _t('Uploadify.ATTACHEDFILES','Attached files') %></div>
 <div class="upload_previews">
+	*** ATTACHED FILES ****
 	ID:$id
+
 	<ul id="uploadifyFileList$ID" class="<% if Sortable %>sortable {'url' : '$Link(dosort)'}<% end_if %>">
 		<% control Files %>
 			<% include AttachedFile %>
@@ -21,7 +23,7 @@
 
 <div class="inputs">
 	<% if Files %>
-	FILES:
+	FILES****:
 		<% control Files %>
 			<input type="text" name="<% if Top.Multi %>{$Top.Name}[]<% else %>{$Top.Name}ID<% end_if %>" value="$ID" />
 		<% end_control %>
