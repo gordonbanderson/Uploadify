@@ -162,6 +162,8 @@ $(function() {
 			console.log("On server ready state change: EVENT");
 			console.log(e);
 
+
+
 			console.log("ORIG DOM ELEMENT:");
 			console.log(uploaderDomElement);
 			var uploaderId = uploaderDomElement.attr('id');
@@ -222,7 +224,7 @@ console.debug(ids);
 						data: {'FileIDs' : ids.join(",")},
 						async: true,
 						dataType: "json",
-						success: function(data) {
+						success: function(data, e) {
 							//alert('T2');
 							//$preview.html(data.html);
 							console.debug(data['FileIDs']);
@@ -234,11 +236,18 @@ console.debug(ids);
 							var li = document.getElementById(domId);
 							
 							if (li == null) {
-								$(data.html).insertAfter($('.no_files'));
+								//upload_preview_Form_EditForm_AttachedFiles
+								var parentListDomId = '#uploadifyFileList'+uploaderDomElement.attr('id')+' li:last-child';
+								//alert(document.getElementById(parentListDomId));
+								alert(parentListDomId);
+								//$(parentListDomId).html('*******************************');
+								$(data.html).insertAfter($(parentListDomId));
 							} else {
 								$(domId).html(data.html);
 							};
 							//var li = $('file-'+)
+							//upload_preview_Form_EditForm_AttachedFiles
+							//uploadifyFileListForm_EditForm_AttachedFiles
 						}
 						});
 					}
