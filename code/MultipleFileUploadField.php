@@ -117,6 +117,7 @@ class MultipleFileUploadField extends UploadifyField
 		
 		error_log("LUPF:".$this->lastUploadedFile);
 		return Convert::array2json(array(
+			'lastUploadedFileID' => $fid,
 			'html' => $this->renderWith('UploadedAttachedFile'),
 			'success' => sprintf(_t('Uploadify.SUCCESSFULADDMULTI','Added files successfully.'), $count)
 		));
