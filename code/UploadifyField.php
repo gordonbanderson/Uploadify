@@ -303,7 +303,10 @@ abstract class UploadifyField extends FormField
 				}
 			}
 			$ext = strtolower(end(explode('.', $_FILES['Filedata']['name'])));
+			error_log("UPLOADIFY: EXT=".$ext);
 			$class = in_array($ext, self::$image_extensions) ? $this->getSetting('image_class') : $this->getSetting('file_class');
+						error_log("CLAZZ:".$class);
+
 			$file = new $class();
 			$u = new Upload();
 			$u->loadIntoFile($_FILES['Filedata'], $file, $upload_folder);
