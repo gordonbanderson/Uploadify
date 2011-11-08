@@ -36,6 +36,7 @@ $(function() {
 					}
 					$e = $(event.currentTarget);
 					if($e.metadata().refreshlink) {
+						alert('T0');
 						$preview = $('#upload_preview_'+$e.attr('id'));
 						$inputs = $('.inputs input', $preview);			
 						if($preview.length) {
@@ -143,11 +144,13 @@ $(function() {
 
     }
 
+    //FIXME inputs div is not updated correctly, wrong event hook
+
 	$(".html5uploadbutton").html5Uploader({
 		name: "upload",
 		postUrl: "/html5upload",
 		srcId: $(this).attr('id'),
-
+		wibble: 'wobble',
 		
 		onClientError:function(e,file,uploaderDomElement){console.log("On client error")},
 		onClientLoadEnd:function(e,file,uploaderDomElement){console.log("On client load end")},
@@ -197,23 +200,42 @@ $(function() {
 
 				//$preview = $('#upload_preview_FileDataObjectManager_Popup_UploadifyForm_UploadedFiles');
 				$inputs = $('.inputs input', $preview);
-				console.log("INPUTS");
-				console.log($inputs);	
+				//console.log("INPUTS");
+				//console.log($inputs);	
 				if($preview.length) {
 					ids = new Array();
 					$inputs.each(function() {
-					if($(this).val().length) {
-						ids.push($(this).val());
-					}
-				});
+						if($(this).val().length) {
+							ids.push($(this).val());
+						}
+					});
 
 
 				if (r != 'success') {
 					ids.push(file_id);
 				}
 
-				//alert("IDS:"+ids.length);
+				console.log(ids);
 
+				//alert("IDS:"+ids.length);
+/*
+AttachedFiles[]:233
+AttachedFiles[]:234
+AttachedFiles[]:235
+
+<div class="inputs">
+	
+		
+			<input type="hidden" name="AttachedFiles[]" value="239">
+		
+			<input type="hidden" name="AttachedFiles[]" value="240">
+		
+			<input type="hidden" name="AttachedFiles[]" value="241">
+		
+	
+</div>
+
+*/
 
 				if (ids.length > 0) {				
 console.debug(opts);
@@ -227,6 +249,7 @@ console.debug(ids);
 						success: function(data, e) {
 							//alert('T2');
 							//$preview.html(data.html);
+							console.log(data);
 							console.debug(data['FileIDs']);
 							// this is the image id
 							var imageId = data['lastUploadedFileID'];
@@ -237,14 +260,54 @@ console.debug(ids);
 							
 							if (li == null) {
 								//upload_preview_Form_EditForm_AttachedFiles
-								var parentListDomId = '#uploadifyFileList'+uploaderDomElement.attr('id')+' li:last-child';
+								var uploader_id = uploaderDomElement.attr('id');
+								var parentListDomId = '#uploadifyFileList'+uploader_id+' li:last-child';
+
+								var image_class = $('#ImageClass_'+uploader_id).html();
 								//alert(document.getElementById(parentListDomId));
-								alert(parentListDomId);
+								//alert(parentListDomId);
 								//$(parentListDomId).html('*******************************');
 								$(data.html).insertAfter($(parentListDomId));
 							} else {
 								$(domId).html(data.html);
 							};
+
+							// now we wish to update div.inputs
+							preview = $('#upload_preview_'+uploaderId);
+
+							//alert('#upload_preview_'+uploaderId);
+
+							//alert("PREVIEW:"+preview);
+							inputs = $('.inputs', preview);
+
+							//alert(inputs.attr('id'));
+
+							
+							//inputs.attr('wibble', 'wobble');
+							//inputs.html('this is a test '+imageId);
+
+							alert('uploadifyFileList'+uploaderId);
+
+							image_ids = [];
+							html = "";
+							lis = $('#uploadifyFileList'+uploaderId+ ' li').each( function(index, value) { 
+			  					//if (value > 0) {
+			  						var li_image_id = ($(value).attr('id'));
+			  						var splits = li_image_id.split('-');
+			  						if (splits.length == 2) {
+				  						image_ids.push(splits[1])
+				  						ht = '<input type="hidden" name="AttachedFiles[]" value="'+splits[1]+'">';
+				  						html = html + ht;
+				  					};
+			  						//var image_id_li = value.attr(id);
+			  						//alert(image_id_li); 
+
+			  					//}
+							});
+
+							//alert(image_ids);
+							inputs.html(html);
+
 							//var li = $('file-'+)
 							//upload_preview_Form_EditForm_AttachedFiles
 							//uploadifyFileListForm_EditForm_AttachedFiles
