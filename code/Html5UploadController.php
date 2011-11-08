@@ -44,12 +44,36 @@ class Html5UploadController extends Controller {
 
 			$file = null;
 
+			error_log(print_r($r, 1));
+
+			$class = in_array($ext, UploadifyField::$image_extensions) ? $r->requestVar('image_class') : $r->requestVar('file_class');
+			$file = new $class();
+
+			/*
+
+			if(isset($_FILES["Filedata"]) && is_uploaded_file($_FILES["Filedata"]["tmp_name"])) {
+			$upload_folder = urldecode($r->requestVar('uploadFolder'));
+			if(isset($_REQUEST['FolderID'])) {
+				if($folder = DataObject::get_by_id("Folder", Convert::raw2sql($_REQUEST['FolderID']))) {
+					$upload_folder = UploadifyField::relative_asset_dir($folder->Filename);
+				}
+			}
+			$ext = strtolower(end(explode('.', $_FILES['Filedata']['name'])));
+			$class = in_array($ext, UploadifyField::$image_extensions) ? $r->requestVar('imageClass') : $r->requestVar('fileClass');
+			$file = new $class();
+			$u = new Upload();
+			$u->loadIntoFile($_FILES['Filedata'], $file, $upload_folder);
+			$file->write();
+			echo $file->ID;
+		} 
+		**/
+
 			if ($core_mime == 'image') {
 				$trace .= ("Creating image\n    ");
-				$file = new Image();
+				//$file = new Image();
 			} else {
 				$trace .= ("Creating file\n    ");
-				$file = new File();
+				//$file = new File();
 			}
 
 
@@ -77,6 +101,13 @@ class Html5UploadController extends Controller {
 			$arr = array ('file_id'=>$file->ID, 'trace' => $trace);
 
 			
+			/*
+						$file = new $class();
+			$u = new Upload();
+			$u->loadIntoFile($_FILES['Filedata'], $file, $upload_folder);
+			$file->write();
+			echo $file->ID;
+			*/
 
 			error_log("TRACE HTML5 UPLOAD");
 			error_log($trace);
