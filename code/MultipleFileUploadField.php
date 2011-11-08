@@ -128,12 +128,20 @@ class MultipleFileUploadField extends UploadifyField
 		error_log("LAST UPLOADED FILE:".$this->lastUploadedFile);
 		$file = $this->lastUploadedFile;
 		if(is_subclass_of($file->ClassName, "Image") || $file->ClassName == "Image") {
+			error_log("Thumb 1");
 			$image = ($file->ClassName != "Image") ? $file->newClassInstance("Image") : $file;
-			if($thumb = $image->CroppedImage(32,32)) {
-				$image->Thumb = $thumb->URL;						
+			error_log("IMAGE:".$image);
+
+			if($thumb = $image->CroppedImage(64,64)) {
+				error_log("THUMB:".print_r($thumb,1));
+				error_log("URL:".$thumb->URL);
+
+				$file->Thumb = $thumb->URL;
+									
 			}
 		}
 		else {
+			error_log("Thumb2 - icon");
 			$file->Thumb = $file->Icon();
 		}
 
@@ -229,15 +237,32 @@ class MultipleFileUploadField extends UploadifyField
 	 * @param DataObject $record The record being updated by the form
 	 */
 	public function saveInto(DataObject $record) {
+		error_log("MFUF: SAVE INTO: T1");
+
+		error_log(print_r($_REQUEST,1));
 		// Can't do has_many without a parent id
 		if(!$record->isInDB()) {
+					error_log("MFUF: SAVE INTO: T3a");
+
 			$record->write();
 		}
+
+		error_log("MFUF: SAVE INTO: T3b");
+
 		if(!$file_class = $this->getFileClass($record)) {
+			error_log("MFUF: SAVE INTO: T4");
+
 			return false;
 		}
+
+error_log("Checking for params ".$this->name);
+
 		if(isset($_REQUEST[$this->name]) && is_array($_REQUEST[$this->name])) {
+					error_log("MFUF: SAVE INTO: T5");
+
 			if($relation_name = $this->getForeignRelationName($record)) {
+						error_log("MFUF: SAVE INTO: T6");
+
 				// Null out all the existing relations and reset.
 				$currentComponentSet = $record->{$this->name}();
 				$currentComponentSet->removeAll();
@@ -250,7 +275,9 @@ class MultipleFileUploadField extends UploadifyField
 					}
 				}
 			}
-		}		
+		} else {
+			error_log("MFUF: Save into T7");
+		}	
 	}
 	
 	/**
@@ -278,25 +305,44 @@ class MultipleFileUploadField extends UploadifyField
 	 * @return string
 	 */
 	public function getForeignRelationName(DataObject $record) {
+		error_log('MFUF:getForeignRelationName T1');
 		
 		if ($many_info = $record->many_many($this->name)) {
 			// return parent field
+					error_log('MFUF:getForeignRelationName T2');
+
 			return $many_info[2];
 		} elseif ($file_class = $record->has_many($this->name)) {
+					error_log('MFUF:getForeignRelationName T4');
+
 			$class = $record->class;
 			$relation_name = false;
 			while($class != "DataObject") {
+						error_log('MFUF:getForeignRelationName T4');
+
 				if($relation_name = singleton($file_class)->getReverseAssociation($class)) {
+							error_log('MFUF:getForeignRelationName T5');
+
 					break;
 				}
+						error_log('MFUF:getForeignRelationName T6');
+
 				$class = get_parent_class($class);					
 			}
 			if(!$relation_name) {
+						error_log('MFUF:getForeignRelationName T7');
+
 				user_error("Could not find has_one or belongs many_many relation ship on $file_class", E_USER_ERROR);
 			}
 
+					error_log('MFUF:getForeignRelationName T8 : '.$relation_name);
+
+
 			return $relation_name .= "ID";
 		}
+
+				error_log('MFUF:getForeignRelationName T9');
+
 		return false;
 	}
 }
