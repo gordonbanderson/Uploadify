@@ -1,5 +1,4 @@
 <li id="file-{$ID}" class="uploadifyFile clr">
-ATTACHED FILE:$Thumb
 <div class="image"><img src="$Thumb" width="32" height="32" alt="$Thumb" /></div>
 <div class="filename">$Name ($ID)</div>
 <div class="delete">
