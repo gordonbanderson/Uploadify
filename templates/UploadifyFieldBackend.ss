@@ -43,8 +43,10 @@
 			<div class="middleColumn">
 
 
-<input id="$id" type="file" class="html5uploadbutton"  multiple>
+<input id="$id" type="file" image_class="$image_class" file_class="$file_class" class="html5uploadbutton"  multiple>
 
+<div id="ImageClass_$id">$image_class</div>
+<div id="FileClass_$id">$file_class</div>
 <div id="dropboxStatus">&nbsp;</div>
 
 
@@ -61,7 +63,10 @@
 					</div>
 				<% else %>
 					<input type="hidden" id="folder_hidden_{$id}" name="FolderID" value="$CurrentUploadFolder.ID" />
-				<% end_if %>			
+				<% end_if %>
+				
+				*** IMAGE CLASS **					<input type="hidden" id="image_class_{$id}" name="ImageClass" value="$image_class" />
+		
 
 				<div id="UploadifyFieldQueue_{$Name}" class="uploadifyfield_queue"></div>
 			</div>
